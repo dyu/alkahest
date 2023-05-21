@@ -1,6 +1,6 @@
 #[cfg(all(feature = "derive", feature = "alloc"))]
 
-use alkahest::{alkahest, serialize_to_vec, deserialize};
+use alkahest::{alkahest, serialize_to_vec, deserialize, DeserializeError};
 
 // Define simple formula. Make it self-serializable.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -9,7 +9,7 @@ struct MyDataType {
   a: u32,
   b: Vec<u8>,
 }
-fn main() {
+fn run() -> Result<(), DeserializeError> {
   // Prepare data to serialize.
   let value = MyDataType {
     a: 1,
@@ -25,7 +25,14 @@ fn main() {
   // Notable example is iterators.
   let (size, _) = serialize_to_vec::<MyDataType, _>(&value, &mut data);
 
-  let de = deserialize::<MyDataType, MyDataType>(&data[..size]).unwrap();
+  let de = deserialize::<MyDataType, MyDataType>(&data[..size])?;
   assert_eq!(de, value);
   println!("Serialized size: {size} | data: {:?}", &de);
+  Ok(())
+}
+
+fn main() {
+    if let Err(e) = run() {
+        println!("{:?}", e); // "There is an error: Oops"
+    }
 }
