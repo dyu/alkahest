@@ -1,15 +1,15 @@
 #[cfg(all(feature = "derive", feature = "alloc"))]
+
+use alkahest::{alkahest, serialize_to_vec, deserialize};
+
+// Define simple formula. Make it self-serializable.
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[alkahest(Formula, SerializeRef, Deserialize)]
+struct MyDataType {
+  a: u32,
+  b: Vec<u8>,
+}
 fn main() {
-  use alkahest::{alkahest, serialize_to_vec, deserialize};
-
-  // Define simple formula. Make it self-serializable.
-  #[derive(Clone, Debug, PartialEq, Eq)]
-  #[alkahest(Formula, SerializeRef, Deserialize)]
-  struct MyDataType {
-    a: u32,
-    b: Vec<u8>,
-  }
-
   // Prepare data to serialize.
   let value = MyDataType {
     a: 1,
