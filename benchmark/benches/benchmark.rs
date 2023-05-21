@@ -11,15 +11,14 @@ extern crate rkyv;
 #[cfg(feature = "speedy")]
 extern crate speedy;
 
-use alkahest::{alkahest, Deserialize, Formula, Lazy, Ref, SerIter, Serialize};
+use alkahest::{alkahest, Deserialize, Formula, Lazy, SerIter, Serialize};
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 #[cfg(feature = "rkyv")]
 use bytecheck::CheckBytes;
 use rand::{
     distributions::{Alphanumeric, DistString},
-    rngs::SmallRng,
-    thread_rng, Rng, SeedableRng,
+    rngs::SmallRng, Rng, SeedableRng,
 };
 
 #[derive(Debug, Clone, Formula, Serialize, Deserialize)]
@@ -123,7 +122,7 @@ fn messages<'a>(mut rng: impl Rng + 'a, len: usize) -> impl Iterator<Item = Game
 pub fn criterion_benchmark(c: &mut Criterion) {
     let mut buffer = Vec::with_capacity(1 << 14);
     buffer.resize(buffer.capacity(), 0);
-    let mut rng = SmallRng::seed_from_u64(42);
+    let rng = SmallRng::seed_from_u64(42);
 
     const LEN: usize = 200;
     let mut size = 0;
